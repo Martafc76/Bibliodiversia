@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<fragment android:name="com.google.android.gms.maps.SupportMapFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments_principal.fragment_mapa"
+    app:uiZoomControls="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+
+
+    <!-- Para añadir el zoom he añadido el uiZoomControls y el app de abajo-->
+
+</fragment>
