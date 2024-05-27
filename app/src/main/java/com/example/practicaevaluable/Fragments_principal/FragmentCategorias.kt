@@ -15,7 +15,7 @@ import com.example.practicaevaluable.Adapter.AdapterPdf
 import com.example.practicaevaluable.Agregar_Categoria
 import com.example.practicaevaluable.Agregar_pdf
 import com.example.practicaevaluable.Models.ModeloCategoria
-import com.example.practicaevaluable.Models.ModeloLibro
+import com.example.practicaevaluable.Models.PdfLibro
 import com.example.practicaevaluable.databinding.FragmentCategoriasBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener
 
 
 
-class fragment_categorias : Fragment() {
+class FragmentCategorias : Fragment() {
 
     private lateinit var binding: FragmentCategoriasBinding
     private lateinit var miContext: Context
@@ -82,7 +82,7 @@ class fragment_categorias : Fragment() {
                     val modelo = ds.getValue(ModeloCategoria::class.java)
                     categoriaArrayList.add(modelo!!)
                 }
-                adaptadorCategoria = AdapterCategoria(miContext, categoriaArrayList, binding.categoriasRv, this@fragment_categorias)
+                adaptadorCategoria = AdapterCategoria(miContext, categoriaArrayList, binding.categoriasRv, this@FragmentCategorias)
                 binding.categoriasRv.adapter = adaptadorCategoria
                 binding.progressBar.visibility = View.GONE
             }
@@ -94,7 +94,7 @@ class fragment_categorias : Fragment() {
         })
     }
 
-    private fun mostrarLibrosEnRecyclerView(libros: ArrayList<ModeloLibro>) {
+    private fun mostrarLibrosEnRecyclerView(libros: ArrayList<PdfLibro>) {
         val adapter = AdapterPdf(miContext, libros)
         binding.librosRv.adapter = adapter
     }
@@ -104,9 +104,9 @@ class fragment_categorias : Fragment() {
         val ref = FirebaseDatabase.getInstance().getReference("Libros")
         ref.orderByChild("categoria").equalTo(categoria.categoria).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val libros = ArrayList<ModeloLibro>()
+                val libros = ArrayList<PdfLibro>()
                 for (ds in snapshot.children) {
-                    val libro = ds.getValue(ModeloLibro::class.java)
+                    val libro = ds.getValue(PdfLibro::class.java)
                     if (libro != null && libro.uid == uid) {  // Filtrar por uid
                         libros.add(libro)
                     }
@@ -118,6 +118,4 @@ class fragment_categorias : Fragment() {
         })
     }
 }
-
-
 

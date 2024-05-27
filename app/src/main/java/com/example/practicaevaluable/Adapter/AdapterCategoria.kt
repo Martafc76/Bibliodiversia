@@ -16,14 +16,14 @@ import com.example.practicaevaluable.DetalleCategoria
 import com.example.practicaevaluable.Models.ModeloCategoria
 import com.example.practicaevaluable.databinding.ItemCategoriaBinding
 import com.google.firebase.database.FirebaseDatabase
-import com.example.practicaevaluable.Fragments_principal.fragment_categorias
+import com.example.practicaevaluable.Fragments_principal.FragmentCategorias
 
 
 class AdapterCategoria(
     private var mContext: Context,
     var categoriaArrayList: ArrayList<ModeloCategoria>,
     private val recyclerView: RecyclerView,
-    private val fragmentInstance: fragment_categorias
+    private val fragmentInstance: FragmentCategorias
 ) : RecyclerView.Adapter<AdapterCategoria.HolderCategoria>(), Filterable {
 
     private lateinit var binding: ItemCategoriaBinding

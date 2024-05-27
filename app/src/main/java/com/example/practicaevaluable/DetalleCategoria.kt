@@ -26,7 +26,7 @@ class DetalleCategoria : AppCompatActivity() {
 
         val categoria = intent.getStringExtra("categoria") ?: ""
 
-        adapter = AdapterPdf(this, emptyList())
+        adapter = AdapterPdf(this, arrayListOf())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -39,10 +39,11 @@ class DetalleCategoria : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("Libros")
         ref.orderByChild("categoria").equalTo(categoria).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val libros = ArrayList<PdfLibro>()
+                val libros = arrayListOf<PdfLibro>()
                 for (ds in snapshot.children) {
                     val libro = ds.getValue(PdfLibro::class.java)
                     if (libro != null && libro.uid == uid) {  // Filtrar por uid
+                        libro.id = ds.key ?: ""
                         libros.add(libro)
                     }
                 }

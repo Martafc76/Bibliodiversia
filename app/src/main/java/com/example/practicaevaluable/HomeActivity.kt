@@ -3,11 +3,11 @@ package com.example.practicaevaluable
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.practicaevaluable.Fragments_principal.fragment_bibliotecas
-import com.example.practicaevaluable.Fragments_principal.fragment_cuenta
+import com.example.practicaevaluable.Fragments_principal.FragmentBibliotecas
+import com.example.practicaevaluable.Fragments_principal.FragmentCuenta
 import com.example.practicaevaluable.databinding.ActivityHomeBinding
-import com.example.practicaevaluable.Fragments_principal.fragment_categorias
-import com.example.practicaevaluable.Fragments_principal.fragment_mapa
+import com.example.practicaevaluable.Fragments_principal.FragmentCategorias
+import com.example.practicaevaluable.Fragments_principal.FragmentMapa
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -59,7 +59,7 @@ class HomeActivity : AppCompatActivity() {
         val nombre_titulo = "Biblioteca"
         binding.tvTitulo.text=nombre_titulo
 
-        val fragment = fragment_bibliotecas()
+        val fragment = FragmentBibliotecas()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment mi biblioteca")
         fragmentTransaction.commit()
@@ -69,7 +69,7 @@ class HomeActivity : AppCompatActivity() {
         val nombre_titulo = "Mi cuenta"
         binding.tvTitulo.text=nombre_titulo
 
-        val fragment = fragment_cuenta()
+        val fragment = FragmentCuenta()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment mi cuenta")
         fragmentTransaction.commit()
@@ -80,7 +80,7 @@ class HomeActivity : AppCompatActivity() {
         val nombre_titulo = "Mapa"
         binding.tvTitulo.text=nombre_titulo
 
-        val fragment = fragment_mapa()
+        val fragment = FragmentMapa()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment mapa")
         fragmentTransaction.commit()
@@ -91,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
         val nombre_titulo = "Categorias"
         binding.tvTitulo.text=nombre_titulo
 
-        val fragment = fragment_categorias()
+        val fragment = FragmentCategorias()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment libro")
         fragmentTransaction.commit()

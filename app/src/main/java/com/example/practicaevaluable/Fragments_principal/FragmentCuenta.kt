@@ -13,7 +13,7 @@ import com.example.practicaevaluable.databinding.FragmentCuentaBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
-class fragment_cuenta : Fragment() {
+class FragmentCuenta : Fragment() {
 
     private lateinit var binding: FragmentCuentaBinding
     private lateinit var firebaseAuth: FirebaseAuth
