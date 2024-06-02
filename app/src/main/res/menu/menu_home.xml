@@ -13,11 +13,11 @@
         android:icon="@drawable/ic_cuenta"
     />
     <item
-        android:id="@+id/Menu_mapa"
-        android:title="@string/Menu_mapa"
+        android:id="@+id/Menu_valoraciones"
         android:icon="@drawable/baseline_map_24"
+        android:title="@string/Menu_valoraciones"
 
-    />
+        />
     <item
         android:id="@+id/Menu_biblioteca"
         android:title="Biblioteca"

@@ -52,8 +52,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:23.0.0")
 
     //Auth firebase con google
-    implementation("com.google.android.gms:play-services-auth-base:18.0.12")
-    implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation("com.google.android.gms:play-services-auth-base:18.0.13")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.firebase:firebase-storage-ktx:21.0.0")
 
@@ -62,19 +62,26 @@ dependencies {
 
 
     implementation("com.google.maps.android:maps-compose:2.11.4")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("com.google.code.gson:gson:2.10.1")
 
     implementation ("com.squareup.picasso:picasso:2.8")
-    implementation("androidx.fragment:fragment-ktx:1.7.0")
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("com.google.android.libraries.places:places:3.4.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
 
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
+
+    //mapas
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+
+
 }

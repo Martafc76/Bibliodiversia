@@ -7,7 +7,7 @@ import com.example.practicaevaluable.Fragments_principal.FragmentBibliotecas
 import com.example.practicaevaluable.Fragments_principal.FragmentCuenta
 import com.example.practicaevaluable.databinding.ActivityHomeBinding
 import com.example.practicaevaluable.Fragments_principal.FragmentCategorias
-import com.example.practicaevaluable.Fragments_principal.FragmentMapa
+import com.example.practicaevaluable.Fragments_principal.FragmentValoracion
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -36,8 +36,8 @@ class HomeActivity : AppCompatActivity() {
                     verLibros()
                     true
                 }
-                R.id.Menu_mapa ->{
-                    verMapa()
+                R.id.Menu_valoraciones->{
+                    verValoracion()
                     true
                 }
                 R.id.Menu_cuenta->{
@@ -76,13 +76,13 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    private fun verMapa(){
-        val nombre_titulo = "Mapa"
+    private fun verValoracion(){
+        val nombre_titulo = "Valoraciones de libros"
         binding.tvTitulo.text=nombre_titulo
 
-        val fragment = FragmentMapa()
+        val fragment = FragmentValoracion()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment mapa")
+        fragmentTransaction.replace(binding.FragmentsPrincipal.id, fragment, "Fragment valoraciones")
         fragmentTransaction.commit()
 
     }
