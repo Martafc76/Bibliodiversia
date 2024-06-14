@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class FragmentBibliotecas : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
+    private lateinit var emptyView: LinearLayout
     private lateinit var adapter: BiblioAdapter
     private lateinit var googleBooksService: GoogleBooksService
 
@@ -30,6 +32,7 @@ class FragmentBibliotecas : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerView)
         searchView = view.findViewById(R.id.searchView)
+        emptyView = view.findViewById(R.id.emptyView)
 
         adapter = BiblioAdapter(mutableListOf())
         recyclerView.adapter = adapter
@@ -60,6 +63,13 @@ class FragmentBibliotecas : Fragment() {
                     override fun onResponse(call: Call<BooksApiResponse>, response: Response<BooksApiResponse>) {
                         val books = response.body()?.items?.map { it.volumeInfo } ?: emptyList()
                         adapter.updateData(books)
+                        if (books.isEmpty()) {
+                            emptyView.visibility = View.VISIBLE
+                            recyclerView.visibility = View.GONE
+                        } else {
+                            emptyView.visibility = View.GONE
+                            recyclerView.visibility = View.VISIBLE
+                        }
                     }
                 })
         }

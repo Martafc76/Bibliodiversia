@@ -8,25 +8,25 @@
     android:background="@drawable/fondo1"
     tools:context=".AuthActivity">
 
-
   <LinearLayout
       android:layout_width="409dp"
       android:layout_height="356dp"
       android:gravity="center"
       android:orientation="vertical"
       android:padding="28dp"
-      tools:layout_editor_absoluteX="2dp">
+      tools:layout_editor_absoluteX="2dp"
+      tools:ignore="MissingConstraints">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/flower_icon" />
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_libro" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:text="FLOWER BOOK"
+        android:text="Bibliodiversia"
         android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold" />
@@ -35,33 +35,31 @@
   <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-
       app:cardUseCompatPadding="false"
       app:layout_constraintBottom_toBottomOf="parent"
       app:cardCornerRadius="28dp"
       android:layout_marginBottom="-20dp"
-      android:id="@+id/cardView"
-      >
-
+      android:id="@+id/cardView">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="28dp">
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-        android:text="Bienvenido!"
-        android:textColor="@color/my_primary"
-        android:textSize="32sp"
-        android:textStyle="bold"/>
 
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-        android:text="Ingresa con sus datos :)"
-        android:alpha="0.7"/>
+          android:text="Bienvenido!"
+          android:textColor="@color/my_primary"
+          android:textSize="32sp"
+          android:textStyle="bold"/>
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Ingresa con tus datos :)"
+          android:alpha="0.7"/>
 
       <View
           android:layout_width="wrap_content"
@@ -99,33 +97,16 @@
           android:drawableEnd="@drawable/password_icon"
           android:inputType="textPassword" />
 
-
       <View
           android:layout_width="wrap_content"
           android:layout_height="10dp"/>
 
-      <LinearLayout
+      <com.google.android.material.button.MaterialButton
+          android:id="@+id/btn_login"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:layout_gravity="center">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_login"
-            android:layout_width="181dp"
-            android:layout_height="60dp"
-            android:text="Login"
-            app:cornerRadius="32dp" />
-        <!--Añadir el icono de google -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_registro"
-            android:layout_width="168dp"
-            android:layout_height="60dp"
-            android:text="Registro"
-            app:cornerRadius="32dp" />
-
-      </LinearLayout>
+          android:layout_height="60dp"
+          android:text="Login"
+          app:cornerRadius="32dp" />
 
       <View
           android:layout_width="wrap_content"
@@ -137,21 +118,26 @@
           android:text="O ingresa con Google"
           android:layout_gravity="center"
           android:alpha="0.7"/>
-      <com.google.android.gms.common.SignInButton
 
+      <com.google.android.gms.common.SignInButton
           android:id="@+id/btn_google"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="24dp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
           android:layout_gravity="center"/>
+
+      <TextView
+          android:id="@+id/tvNoCuenta"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="¿No tienes cuenta? Regístrate"
+          android:textColor="@color/my_primary"
+          android:textSize="16sp"
+          android:layout_marginTop="16dp"
+          android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 
-
   </androidx.cardview.widget.CardView>
 
-
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

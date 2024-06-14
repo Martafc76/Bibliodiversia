@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.7.1")
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
 
     testImplementation("junit:junit:4.13.2")

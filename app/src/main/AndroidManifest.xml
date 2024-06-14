@@ -52,6 +52,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".RegistroActivity" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:label="UserProfileActivity">
+        </activity>
+
+
+
     </application>
 
 </manifest>

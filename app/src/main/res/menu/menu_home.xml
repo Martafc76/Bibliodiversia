@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/Menu_libros"
         android:title="@string/Menu_libros"
-        android:icon="@drawable/ic_libro"
+        android:icon="@drawable/ic_libro" />
 
-        />
     <item
         android:id="@+id/Menu_cuenta"
         android:title="@string/Menu_cuenta"
-        android:icon="@drawable/ic_cuenta"
-    />
+        android:icon="@drawable/ic_cuenta" />
+
     <item
         android:id="@+id/Menu_valoraciones"
         android:icon="@drawable/baseline_map_24"
-        android:title="@string/Menu_valoraciones"
+        android:title="@string/Menu_valoraciones" />
 
-        />
     <item
         android:id="@+id/Menu_biblioteca"
         android:title="Biblioteca"
-        android:icon="@drawable/ic_biblio"
+        android:icon="@drawable/ic_biblio" />
 
-        />
+    <item
+        android:id="@+id/Menu_perfil"
+        android:title="Información del creador"
+        android:icon="@android:drawable/ic_dialog_info"/>
 
 </menu>
