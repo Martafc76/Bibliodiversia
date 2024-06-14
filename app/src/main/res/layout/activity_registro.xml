@@ -7,7 +7,6 @@
     android:background="@drawable/fondo1"
     tools:context=".RegistroActivity">
 
-
     <!-- Encabezado -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,24 +70,58 @@
                 android:maxLines="1" />
 
             <!-- Campo Contraseña -->
-            <EditText
-                android:id="@+id/etPasswordRegistro"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/password_icon"
-                android:hint="Contraseña"
-                android:inputType="textPassword"
-                android:maxLines="1" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etPasswordRegistro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Contraseña"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+                <ImageButton
+                    android:id="@+id/btnTogglePasswordVisibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/password_icon"
+                    android:contentDescription="Toggle password visibility"
+                    android:padding="8dp" />
+
+            </LinearLayout>
 
             <!-- Campo Confirmar contraseña -->
-            <EditText
-                android:id="@+id/etConfirmarPassword"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/password_icon"
-                android:hint="Confirmar contraseña"
-                android:inputType="textPassword"
-                android:maxLines="1" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etConfirmarPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Confirmar contraseña"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+                <ImageButton
+                    android:id="@+id/btnTogglePasswordVisibilityConfirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/password_icon"
+                    android:contentDescription="Toggle password visibility"
+                    android:padding="8dp" />
+
+            </LinearLayout>
 
 
             <!-- Botón Registro Final -->
@@ -99,6 +132,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Registrarse"
                 android:textColor="@android:color/white" />
+
             <Button
                 android:id="@+id/btnVolver"
                 android:layout_width="match_parent"
@@ -114,7 +148,6 @@
                 app:layout_constraintTop_toBottomOf="@id/btnRegistroFinal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
-
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

@@ -9,8 +9,8 @@
     tools:context=".AuthActivity">
 
   <LinearLayout
-      android:layout_width="409dp"
-      android:layout_height="356dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
       android:gravity="center"
       android:orientation="vertical"
       android:padding="28dp"
@@ -25,7 +25,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
         android:text="Bibliodiversia"
         android:textColor="@color/black"
         android:textSize="32sp"
@@ -73,7 +72,7 @@
           android:textStyle="bold"/>
 
       <EditText
-          android:id="@+id/et_email"
+          android:id="@+id/etEmail"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:drawableEnd="@drawable/done_icon"
@@ -90,19 +89,38 @@
           android:alpha="0.7"
           android:textStyle="bold"/>
 
-      <EditText
-          android:id="@+id/et_password"
+      <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:drawableEnd="@drawable/password_icon"
-          android:inputType="textPassword" />
+          android:orientation="horizontal"
+          android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+        <ImageButton
+            android:id="@+id/btnTogglePasswordVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/password_icon"
+            android:contentDescription="Toggle password visibility"
+            android:padding="8dp" />
+
+      </LinearLayout>
 
       <View
           android:layout_width="wrap_content"
           android:layout_height="10dp"/>
 
       <com.google.android.material.button.MaterialButton
-          android:id="@+id/btn_login"
+          android:id="@+id/btnLogin"
           android:layout_width="match_parent"
           android:layout_height="60dp"
           android:text="Login"
@@ -120,7 +138,7 @@
           android:alpha="0.7"/>
 
       <com.google.android.gms.common.SignInButton
-          android:id="@+id/btn_google"
+          android:id="@+id/btnGoogle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="24dp"
@@ -141,3 +159,5 @@
   </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

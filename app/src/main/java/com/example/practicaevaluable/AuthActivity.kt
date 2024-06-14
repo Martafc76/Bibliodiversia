@@ -3,21 +3,20 @@ package com.example.practicaevaluable
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.example.practicaevaluable.databinding.ActivityAuthBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-
 
 class AuthActivity : AppCompatActivity() {
 
@@ -57,8 +56,28 @@ class AuthActivity : AppCompatActivity() {
         binding.tvNoCuenta.setOnClickListener {
             openRegistrationActivity()
         }
+
+        // Configurar el botón para alternar la visibilidad de la contraseña
+        binding.btnTogglePasswordVisibility.setOnClickListener {
+            togglePasswordVisibility()
+        }
     }
 
+    private fun togglePasswordVisibility() {
+        val isVisible = binding.etPassword.transformationMethod == null
+
+        binding.etPassword.transformationMethod =
+            if (isVisible) PasswordTransformationMethod.getInstance()
+            else null
+
+        binding.btnTogglePasswordVisibility.setImageResource(
+            if (isVisible) R.drawable.password_icon
+            else R.drawable.password_icon
+        )
+
+        // Mover el cursor al final del texto
+        binding.etPassword.setSelection(binding.etPassword.text.length)
+    }
 
     private fun googleLogin() {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -94,6 +113,7 @@ class AuthActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
                     if (user != null && user.isEmailVerified) {
+                        saveSessionState(true) // Guardar sesión como iniciada
                         openMainActivity()
                     } else {
                         sendEmailVerification()
@@ -126,8 +146,8 @@ class AuthActivity : AppCompatActivity() {
             }
     }
 
-    private var email=""
-    private var password=""
+    private var email = ""
+    private var password = ""
 
     private fun basicLogin() {
         email = binding.etEmail.text.toString().trim()
