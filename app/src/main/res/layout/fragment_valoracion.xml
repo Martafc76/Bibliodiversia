@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_book_list.xml -->
+<!-- fragment_valoracion.xml -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +20,19 @@
         android:layout_height="wrap_content"
         android:hint="Autor del libro" />
 
+    <EditText
+        android:id="@+id/editTextOpinion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Opinión sobre el libro" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0" />
+
     <Button
         android:id="@+id/buttonAddBook"
         android:layout_width="match_parent"
@@ -24,34 +40,21 @@
         android:text="Agregar libro" />
 
     <TextView
+        android:id="@+id/textViewNoBooks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Libros no leídos"
-        android:textStyle="bold"
+        android:text="No hay libros agregados"
+        android:textStyle="italic"
+        android:textColor="@android:color/darker_gray"
+        android:visibility="gone"
         android:paddingTop="8dp"
         android:paddingBottom="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewUnreadBooks"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Libros leídos"
-        android:textStyle="bold"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewReadBooks"
+        android:id="@+id/recyclerViewBooks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="8dp" />
 
 </LinearLayout>
-

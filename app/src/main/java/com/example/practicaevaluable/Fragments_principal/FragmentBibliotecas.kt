@@ -54,7 +54,8 @@ class FragmentBibliotecas : Fragment() {
 
     private fun searchBooks(query: String?) {
         if (query != null) {
-            googleBooksService.searchBooks(query, "AIzaSyAvn-gZPaZyEqT4BpNWVXEuDT8r7frCnPM")
+            val genreQuery = "fiction" // Aquí debes obtener el género seleccionado por el usuario o dejarlo como ejemplo
+            googleBooksService.searchBooks(query, "AIzaSyAvn-gZPaZyEqT4BpNWVXEuDT8r7frCnPM", genreQuery)
                 .enqueue(object : Callback<BooksApiResponse> {
                     override fun onFailure(call: Call<BooksApiResponse>, t: Throwable) {
                         // Handle error
@@ -74,4 +75,5 @@ class FragmentBibliotecas : Fragment() {
                 })
         }
     }
+
 }

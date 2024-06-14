@@ -12,5 +12,6 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="default_web_client_id" translatable="false">tu_default_web_client_id</string>
 
 </resources>

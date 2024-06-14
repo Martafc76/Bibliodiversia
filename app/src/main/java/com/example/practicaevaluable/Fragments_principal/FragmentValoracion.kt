@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RatingBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,246 +17,191 @@ import com.example.practicaevaluable.Adapter.AdapterListas
 import com.example.practicaevaluable.Models.BookItem2
 import com.example.practicaevaluable.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.*
-
 
 class FragmentValoracion : Fragment() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
-
     private lateinit var editTextTitle: EditText
     private lateinit var editTextAuthor: EditText
+    private lateinit var editTextOpinion: EditText
+    private lateinit var ratingBar: RatingBar
     private lateinit var buttonAddBook: Button
-    private lateinit var recyclerViewUnreadBooks: RecyclerView
-    private lateinit var recyclerViewReadBooks: RecyclerView
-    private lateinit var unreadBooksAdapter: AdapterListas
-    private lateinit var readBooksAdapter: AdapterListas
+    private lateinit var recyclerViewBooks: RecyclerView
+    private lateinit var textViewNoBooks: TextView
+    private lateinit var bookAdapter: AdapterListas
+    private var books = mutableListOf<BookItem2>()
+
+    private val database = FirebaseDatabase.getInstance()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val userId = currentUser?.uid
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_valoracion, container, false)
-    }
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_valoracion, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-
+        // Initialize views
         editTextTitle = view.findViewById(R.id.editTextTitle)
         editTextAuthor = view.findViewById(R.id.editTextAuthor)
+        editTextOpinion = view.findViewById(R.id.editTextOpinion)
+        ratingBar = view.findViewById(R.id.ratingBar)
         buttonAddBook = view.findViewById(R.id.buttonAddBook)
-        recyclerViewUnreadBooks = view.findViewById(R.id.recyclerViewUnreadBooks)
-        recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks)
+        recyclerViewBooks = view.findViewById(R.id.recyclerViewBooks)
+        textViewNoBooks = view.findViewById(R.id.textViewNoBooks)
 
+        // Setup RecyclerView
+        bookAdapter = AdapterListas(
+            books,
+            this::onDeleteBook,
+            this::showRatingDialog
+        )
+        recyclerViewBooks.layoutManager = LinearLayoutManager(requireContext())
+        recyclerViewBooks.adapter = bookAdapter
+
+        // Setup button click listener
         buttonAddBook.setOnClickListener {
             addBook()
         }
 
-        setupRecyclerViews()
-        observeUnreadBooks()
-        observeReadBooks()
+        // Load books from Firebase
+        loadBooks()
+
+        return view
     }
 
-    private fun setupRecyclerViews() {
-        recyclerViewUnreadBooks.layoutManager = LinearLayoutManager(context)
-        unreadBooksAdapter = AdapterListas(
-            emptyList(),
-            ::onBookChecked,
-            this::deleteBookFromUnread,
-            ::showRatingDialog,
-            requireActivity().supportFragmentManager,
-            isReadList = false // Lista de libros no leídos
-        )
-        recyclerViewUnreadBooks.adapter = unreadBooksAdapter
+    private fun loadBooks() {
+        userId?.let { uid ->
+            val booksRef = database.reference.child("users").child(uid).child("books")
+            booksRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        books.clear() // Limpiar la lista antes de añadir libros
+                        for (snapshot in dataSnapshot.children) {
+                            val book = snapshot.getValue(BookItem2::class.java)
+                            book?.let { books.add(it) }
+                        }
+                        bookAdapter.updateBooks(books) // Actualizar el adaptador después de cargar libros
+                        updateUI()
+                    } else {
+                        showNoBooksMessage()
+                    }
+                }
 
-        recyclerViewReadBooks.layoutManager = LinearLayoutManager(context)
-        readBooksAdapter = AdapterListas(
-            emptyList(),
-            ::onBookChecked,
-            this::deleteBookFromRead,
-            ::showRatingDialog,
-            requireActivity().supportFragmentManager,
-            isReadList = true // Lista de libros leídos
-        )
-        recyclerViewReadBooks.adapter = readBooksAdapter
+                override fun onCancelled(databaseError: DatabaseError) {
+                    showNoBooksMessage()
+                }
+            })
+        }
     }
 
-    private fun observeUnreadBooks() {
-        val user = auth.currentUser ?: return
-        db.collection("unreadBooks").document(user.uid).collection("books")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error al cargar libros no leídos: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-                if (snapshot != null) {
-                    val books = snapshot.documents.mapNotNull { it.toObject(BookItem2::class.java) }
-                    unreadBooksAdapter.updateBooks(books)
-                }
-            }
-    }
 
-    private fun observeReadBooks() {
-        val user = auth.currentUser ?: return
-        db.collection("readBooks").document(user.uid).collection("books")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Error al cargar libros leídos: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@addSnapshotListener
-                }
-                if (snapshot != null) {
-                    val books = snapshot.documents.mapNotNull { it.toObject(BookItem2::class.java) }
-                    readBooksAdapter.updateBooks(books)
-                }
-            }
-    }
 
     private fun addBook() {
-        val title = editTextTitle.text.toString()
-        val author = editTextAuthor.text.toString()
+        val title = editTextTitle.text.toString().trim()
+        val author = editTextAuthor.text.toString().trim()
+        val opinion = editTextOpinion.text.toString().trim()
+        val rating = ratingBar.rating
 
-        if (title.isNotBlank() && author.isNotBlank()) {
-            val user = auth.currentUser
-            if (user != null) {
-                val book = BookItem2(
-                    id = UUID.randomUUID().toString(),
-                    title = title,
-                    author = author,
-                    read = false // Nuevo libro se agrega como no leído
-                )
-                db.collection("unreadBooks").document(user.uid).collection("books").document(book.id)
-                    .set(book)
-                    .addOnSuccessListener {
-                        editTextTitle.text.clear()
-                        editTextAuthor.text.clear()
-                        Toast.makeText(requireContext(), "Libro agregado correctamente", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(
-                            requireContext(),
-                            "Error al agregar el libro: ${e.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-            } else {
-                Toast.makeText(requireContext(), "No se pudo obtener el usuario actual", Toast.LENGTH_SHORT).show()
-            }
+        if (title.isNotEmpty() && author.isNotEmpty()) {
+            val newBook = BookItem2(
+                UUID.randomUUID().toString(),
+                title,
+                author,
+                opinion,
+                rating
+            )
+            saveBookToFirebase(newBook)
+
+            // Limpiar campos de entrada después de agregar el libro
+            editTextTitle.text.clear()
+            editTextAuthor.text.clear()
+            editTextOpinion.text.clear()
+            ratingBar.rating = 0f
         } else {
+            // Mostrar mensaje de campos incompletos
             Toast.makeText(requireContext(), "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun onBookChecked(book: BookItem2, isRead: Boolean) {
-        if (isRead) {
-            // Mostrar el diálogo para agregar opinión y valoración
-            showRatingDialog(book)
-        } else {
-            // Manejar el caso de desmarcar como leído si es necesario
-            val user = auth.currentUser ?: return
-            book.read = false
-            db.collection("unreadBooks").document(user.uid).collection("books").document(book.id)
-                .set(book)
+
+
+    private fun saveBookToFirebase(book: BookItem2) {
+        userId?.let { uid ->
+            val booksRef = database.reference.child("users").child(uid).child("books")
+            val bookId = booksRef.push().key ?: ""
+
+            val bookData = hashMapOf(
+                "id" to bookId,
+                "title" to book.title,
+                "author" to book.author,
+                "opinion" to book.opinion,
+                "rating" to book.rating
+            )
+
+            booksRef.child(bookId).setValue(bookData)
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Libro movido a no leídos", Toast.LENGTH_SHORT).show()
+                    books.add(book)
+                    bookAdapter.updateBooks(books)
+                    updateUI()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Error al mover el libro: ${e.message}", Toast.LENGTH_SHORT).show()
+                    // Handle error
                 }
         }
     }
 
-    private fun deleteBookFromUnread(book: BookItem2) {
-        val user = auth.currentUser ?: return
+    private fun onDeleteBook(book: BookItem2) {
+        userId?.let { uid ->
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+                .setTitle("Eliminar Libro")
+                .setMessage("¿Estás seguro de que quieres eliminar este libro?")
+                .setPositiveButton("Eliminar") { dialog, which ->
+                    deleteBookFromFirebase(book)
+                }
+                .setNegativeButton("Cancelar", null)
+                .create()
 
-        db.collection("unreadBooks").document(user.uid).collection("books").document(book.id)
-            .delete()
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Libro eliminado de no leídos", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error al eliminar libro de no leídos: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+            dialogBuilder.show()
+        }
     }
 
-    private fun deleteBookFromRead(book: BookItem2) {
-        val user = auth.currentUser ?: return
+    private fun deleteBookFromFirebase(book: BookItem2) {
+        userId?.let { uid ->
+            val booksRef = database.reference.child("users").child(uid).child("books").child(book.id)
+            booksRef.removeValue()
+                .addOnSuccessListener {
+                    books.remove(book)
+                    bookAdapter.updateBooks(books)
+                    updateUI()
+                    Toast.makeText(requireContext(), "Libro eliminado", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Error al eliminar libro", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
 
-        db.collection("readBooks").document(user.uid).collection("books").document(book.id)
-            .delete()
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Libro eliminado de leídos", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error al eliminar libro de leídos: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+
+
+    private fun updateUI() {
+        if (books.isEmpty()) {
+            showNoBooksMessage()
+        } else {
+            textViewNoBooks.visibility = View.GONE
+        }
+    }
+
+    private fun showNoBooksMessage() {
+        textViewNoBooks.visibility = View.VISIBLE
     }
 
     private fun showRatingDialog(book: BookItem2) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_rate_book, null)
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .create()
-
-        val editTextOpinion = dialogView.findViewById<EditText>(R.id.editTextOpinion)
-        val ratingBar = dialogView.findViewById<RatingBar>(R.id.ratingBar)
-        val buttonSaveRating = dialogView.findViewById<Button>(R.id.buttonSaveRating)
-
-        buttonSaveRating.setOnClickListener {
-            val opinion = editTextOpinion.text.toString()
-            val rating = ratingBar.rating
-
-            if (opinion.isNotBlank() && rating > 0) {
-                saveRating(book, opinion, rating)
-                dialog.dismiss()
-            } else {
-                Toast.makeText(requireContext(), "Por favor, agrega una opinión y una valoración", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        dialog.show()
-    }
-
-    private fun saveRating(book: BookItem2, opinion: String, rating: Float) {
-        val user = auth.currentUser ?: return
-
-        book.read = true
-        book.opinion = opinion
-        book.rating = rating
-
-        // Eliminar el libro de la colección de no leídos
-        db.collection("unreadBooks").document(user.uid).collection("books").document(book.id)
-            .delete()
-            .addOnSuccessListener {
-                // Agregar el libro a la colección de leídos con la nueva información
-                db.collection("readBooks").document(user.uid).collection("books").document(book.id)
-                    .set(book)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Libro valorado y movido a leídos", Toast.LENGTH_SHORT).show()
-
-                        // Actualizar la vista de libros leídos
-                        observeReadBooks()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(requireContext(), "Error al mover el libro a leídos: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error al eliminar libro de no leídos: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+        // Implement rating dialog if needed
     }
 }
-
-

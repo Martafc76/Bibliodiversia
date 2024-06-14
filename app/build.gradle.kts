@@ -74,6 +74,7 @@ dependencies {
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.0")
 
 
     testImplementation("junit:junit:4.13.2")

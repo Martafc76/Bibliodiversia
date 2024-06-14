@@ -14,11 +14,11 @@ data class BookItem2(
     val id: String = "",
     val title: String = "",
     val author: String = "",
-    var read: Boolean = false,
     var opinion: String = "",
     var rating: Float = 0f,
     val image: String = ""
 )
+
 
 
 data class Book(
