@@ -88,11 +88,16 @@ class FragmentCategorias : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                // Verificar si el usuario está autenticado antes de mostrar el mensaje de error
+                if (firebaseAuth.currentUser != null) {
+                    // Usuario autenticado pero ocurrió un error al cargar categorías
+                    Toast.makeText(miContext, "Error al cargar categorías: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(miContext, "Error al cargar categorías: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun mostrarLibrosEnRecyclerView(libros: ArrayList<PdfLibro>) {
         val adapter = AdapterPdf(miContext, libros)
